@@ -48,6 +48,14 @@ public class DiaryController {
         diaryService.patchDiary(longId, body);
     }
 
+    final void restore(final String id) {
+        long longId = Long.parseLong(id);
+        if (longId < 1) {
+            throw new Main.UI.InvalidInputException();
+        }
+        diaryService.restoreDiary(longId);
+    }
+
     enum Status {
         READY,
         RUNNING,

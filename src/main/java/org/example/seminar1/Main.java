@@ -93,6 +93,13 @@ public class Main {
                             server.patch(inputId, inputBody);
                         }
 
+                        case "RESTORE" -> {
+                            ConsoleIO.printLine("복구할 id 를 입력하세요!");
+                            final String input = ConsoleIO.readLine();
+                            server.restore(input);
+                        }
+
+
                         case "FINISH" -> {
                             server.finish();
                         }

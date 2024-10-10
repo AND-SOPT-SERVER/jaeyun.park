@@ -37,6 +37,18 @@ public class DiaryRepository {
         storage.put(diary.getId(), diary);
     }
 
+    public void restore(long longId) {
+        Diary diary = storage.get(longId);
+        if (diary == null) {
+            throw new IllegalArgumentException("해당 id를 가진 Diary가 없습니다.");
+        }
+        if (!diary.getIsDeleted()) {
+            throw new IllegalStateException("해당 id를 가진 Diary는 삭제되지 않았습니다.");
+        }
+        diary.setIsDeleted(false);
+        storage.put(diary.getId(), diary);
+    }
+
     private static void validateRetrieval(Diary diary) {
         if (diary == null) {
             throw new IllegalArgumentException("해당 id를 가진 Diary가 없습니다.");

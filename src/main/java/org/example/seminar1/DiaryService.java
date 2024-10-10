@@ -21,4 +21,8 @@ public class DiaryService {
     void deleteDiary(final long id) {
         diaryRepository.delete(id);
     }
+
+    public void restoreDiary(long longId) {
+        diaryRepository.restore(longId);
+    }
 }
