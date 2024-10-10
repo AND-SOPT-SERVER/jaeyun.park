@@ -14,7 +14,7 @@ public class DiaryService {
     void writeDiary(final String body, final MemoryType memoryType) {
         final Diary diary = new Diary(null, body, false);
         getDiaryRepository(memoryType).save(diary);
-    }용
+    }
 
     List<Diary> getDiaryList(final MemoryType memoryType) {
         return getDiaryRepository(memoryType).findAll();
