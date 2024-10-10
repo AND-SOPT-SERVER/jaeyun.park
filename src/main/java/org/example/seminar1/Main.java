@@ -1,12 +1,17 @@
 package org.example.seminar1;
 
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Main {
     public static void main(String[] args) {
         final UI ui;
+        Map<MemoryType, DiaryRepository> repositoryMap = new HashMap<>();
+        repositoryMap.put(MemoryType.FILE, new FileDiaryRepository());
+        repositoryMap.put(MemoryType.MEMORY, new MemoryDiaryRepository());
         try {
-            ui = new DiaryUI(new DiaryController());
+            ui = new DiaryUI(new DiaryController(new DiaryService(repositoryMap)));
             ui.runRepeatedly();
         } catch (Throwable t) {
 

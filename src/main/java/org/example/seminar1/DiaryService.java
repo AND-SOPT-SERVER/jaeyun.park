@@ -5,18 +5,16 @@ import java.util.List;
 import java.util.Map;
 
 public class DiaryService {
-    private Map<MemoryType, DiaryRepository > diaryRepositoryMap;
+    private Map<MemoryType, DiaryRepository> diaryRepositoryMap;
 
-    DiaryService () {
-        diaryRepositoryMap = new HashMap<>();
-        diaryRepositoryMap.put(MemoryType.FILE, new FileDiaryRepository());
-        diaryRepositoryMap.put(MemoryType.MEMORY, new MemoryDiaryRepository());
+    DiaryService (Map<MemoryType, DiaryRepository> diaryRepositoryMap) {
+        this.diaryRepositoryMap = diaryRepositoryMap;
     }
 
     void writeDiary(final String body, final MemoryType memoryType) {
         final Diary diary = new Diary(null, body, false);
         getDiaryRepository(memoryType).save(diary);
-    }
+    }용
 
     List<Diary> getDiaryList(final MemoryType memoryType) {
         return getDiaryRepository(memoryType).findAll();

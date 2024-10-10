@@ -5,7 +5,11 @@ import java.util.List;
 public class DiaryController {
 
     private Status status = Status.READY;
-    private final DiaryService diaryService = new DiaryService();
+    private final DiaryService diaryService;
+
+    DiaryController (DiaryService diaryService) {
+        this.diaryService = diaryService;
+    }
 
     Status getStatus() {
         return status;
