@@ -1,12 +1,17 @@
 package org.example.seminar1;
 
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Main {
     public static void main(String[] args) {
         final UI ui;
+        Map<MemoryType, DiaryRepository> repositoryMap = new HashMap<>();
+        repositoryMap.put(MemoryType.FILE, new FileDiaryRepository());
+        repositoryMap.put(MemoryType.MEMORY, new MemoryDiaryRepository());
         try {
-            ui = new DiaryUI(new DiaryController());
+            ui = new DiaryUI(new DiaryController(new DiaryService(repositoryMap)));
             ui.runRepeatedly();
         } catch (Throwable t) {
 
@@ -64,7 +69,9 @@ public class Main {
                 case RUNNING -> {
                     switch (selected) {
                         case "GET" -> {
-                            server.getList().forEach(diary -> {
+                            ConsoleIO.printLine("어디에 저장소? MEMORY | FILE");
+                            final MemoryType memoryType = MemoryType.valueOf(ConsoleIO.readLine());
+                            server.getList(memoryType).forEach(diary -> {
                                 try {
                                     ConsoleIO.printLine(diary.getId() + " : " + diary.getBody());
                                 } catch (IOException e) {
@@ -75,13 +82,17 @@ public class Main {
                         case "POST" -> {
                             ConsoleIO.printLine("한 줄 일기를 작성해주세요!");
                             final String input = ConsoleIO.readLine();
-                            server.post(input);
+                            ConsoleIO.printLine("어디에 저장소? MEMORY | FILE");
+                            final MemoryType memoryType = MemoryType.valueOf(ConsoleIO.readLine());
+                            server.post(input, memoryType);
                         }
 
                         case "DELETE" -> {
                             ConsoleIO.printLine("삭제할 id 를 입력하세요!");
                             final String input = ConsoleIO.readLine();
-                            server.delete(input);
+                            ConsoleIO.printLine("어디에 저장소? MEMORY | FILE");
+                            final MemoryType memoryType = MemoryType.valueOf(ConsoleIO.readLine());
+                            server.delete(input, memoryType);
                         }
                         case "PATCH" -> {
                             ConsoleIO.printLine("수정할 id 를 입력하세요!");
@@ -89,9 +100,20 @@ public class Main {
 
                             ConsoleIO.printLine("수정 body 를 입력하세요!");
                             final String inputBody = ConsoleIO.readLine();
+                            ConsoleIO.printLine("어디에 저장소? MEMORY | FILE");
+                            final MemoryType memoryType = MemoryType.valueOf(ConsoleIO.readLine());
 
-                            server.patch(inputId, inputBody);
+                            server.patch(inputId, inputBody, memoryType);
                         }
+
+                        case "RESTORE" -> {
+                            ConsoleIO.printLine("복구할 id 를 입력하세요!");
+                            final String input = ConsoleIO.readLine();
+                            ConsoleIO.printLine("어디에 저장소? MEMORY | FILE");
+                            final MemoryType memoryType = MemoryType.valueOf(ConsoleIO.readLine());
+                            server.restore(input, memoryType);
+                        }
+
 
                         case "FINISH" -> {
                             server.finish();
