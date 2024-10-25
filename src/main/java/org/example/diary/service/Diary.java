@@ -1,19 +1,35 @@
 package org.example.diary.service;
 
 public class Diary {
-    private final long id;
-    private final String name;
+    private Long id;
+    private final String title;
+    private final String content;
+    private String createdAt;
 
-    public Diary(long id, String name) {
+    public Diary(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
+
+    public Diary(Long id, String title, String content, String createdAt) {
         this.id = id;
-        this.name = name;
+        this.title = title;
+        this.content = content;
+        this.createdAt = createdAt;
     }
 
-    public long getId() {
-        return id;
+    public long getId() {return id;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
     }
 }

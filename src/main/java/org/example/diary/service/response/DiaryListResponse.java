@@ -1,6 +1,5 @@
-package org.example.diary.api;
+package org.example.diary.service.response;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class DiaryListResponse {

@@ -1,31 +1,50 @@
 package org.example.diary.service;
 
-import org.example.diary.api.DiaryCreateRequest;
-import org.example.diary.api.DiaryResponse;
-import org.example.diary.repository.DiaryEntity;
-import org.example.diary.repository.DiaryRepository;
+import org.example.diary.service.response.DiaryListResponse;
+import org.example.diary.service.response.DiaryResponse;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class DiaryService {
 
-    private final DiaryRepository diaryRepository;
+    private final DiaryPersistence diaryPersistence;
 
-    public DiaryService(DiaryRepository diaryRepository) {
-        this.diaryRepository = diaryRepository;
+    public DiaryService(DiaryPersistence diaryPersistence) {
+        this.diaryPersistence = diaryPersistence;
     }
 
-    public void createDiary(DiaryCreateRequest request) {
-        diaryRepository.save(new DiaryEntity(request.getName()));
+    public long createDiary(final Diary diary) {
+        return diaryPersistence.save(diary).getId();
     }
 
-    public List<Diary> getList() {
-        return diaryRepository.findAll().stream()
-                .map(diaryEntity -> new Diary(diaryEntity.getId(), diaryEntity.getName())).toList();
+    public DiaryListResponse getList() {
+        return new DiaryListResponse(diaryPersistence.findAll().stream().map(DiaryResponse::of).toList());
+
     }
 
+    public DiaryResponse findById(final long id) {
+        return DiaryResponse.of(diaryPersistence.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("다이어리 존재하지 않습니다.")));
+    }
+
+    @Transactional
+    public void deleteById(final long id) {
+        validateExistence(id);
+        diaryPersistence.deleteById(id);
+    }
+
+    @Transactional
+    public DiaryResponse updateDiary(final Long id, final Diary diary) {
+        //jpa entity찾아서 entityupdate후 model로 변환
+        Diary updatedDiary = diaryPersistence.update(id, diary)
+                .orElseThrow(() -> new IllegalArgumentException("다이어리가 존재하지 않습니다."));
+        return DiaryResponse.of(updatedDiary);
+    }
+
+    private void validateExistence(Long id) {
+        if (!diaryPersistence.existsById(id)) {
+        throw new IllegalArgumentException("다이어리가 존재하지 않습니다.");
+        }
+    }
 }
