@@ -1,0 +1,15 @@
+spring: #스프링이 빈을 띄울 때 부트는 자동으로 값을 넣어주지만 필요한 설정들은 yml로 넣어준다.
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password:
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+      dialect: org.hibernate.dialect.H2Dialect
+    properties:
+      format_sql: true
+      show_sql: true
